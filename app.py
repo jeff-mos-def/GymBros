@@ -152,17 +152,24 @@ def plan(person_info):
         with st.spinner('Generating a diet plan suitable for you Please Wait....'):
             bmi, bmi_class = calculate_bmi(person_info)
             bmr, tdee = energy_calc(person_info)
-
-            prompt = f"""
-      Generate a diet plan in a tabular format (make sure to return only the table not any text).
-      For a {person_info["sex"]} {loc} person with bmr of {bmr}, bmi of {bmi} and total daily expenditure of {tdee}.
-      Suggest dishes for diet which are strictly {vg}.
-      and they have following preferences : {remarks}
-      The goal is to person_info["goal"].
-      the table should be have these features: 1. mealtime (breakfast, lunch, dinner, etc)
-      2. food item
-      3. macro breakdown
-      """
+            if remarks:
+                prompt = f"""
+                    Generate a diet plan in a tabular format for a {person_info["sex"]} {loc} person with bmr of {bmr}, bmi of {bmi} and total daily expenditure of {tdee}.
+                    Suggest dishes for diet which are strictly {vg} and they have following preferences : {remarks}
+                    The goal is to {person_info["goal"]}.
+                    the table should be have these features: 1. mealtime (breakfast, lunch, dinner, etc)
+                    2. food item
+                    3. macro breakdown
+                """
+            else:
+                prompt = f"""
+                    Generate a diet plan in a tabular format for a {person_info["sex"]} {loc} person with bmr of {bmr}, bmi of {bmi} and total daily expenditure of {tdee}.
+                    Suggest dishes for diet which are strictly {vg}.
+                    The goal is to {person_info["goal"]}.
+                    the table should be have these features: 1. mealtime (breakfast, lunch, dinner, etc)
+                    2. food item
+                    3. macro breakdown
+                """
             response = get_response(prompt)
             st.write(response)
 
